@@ -3,7 +3,9 @@ import os
 
 ARQUIVO = "gastos.xlsx"
 
-
+# -----------------------------
+# Lista fixa de categorias
+# -----------------------------
 CATEGORIAS = [
     "Alimentação",
     "Transporte",
@@ -14,7 +16,9 @@ CATEGORIAS = [
     "Serviços"
 ]
 
-
+# -----------------------------
+# Carregar arquivo Excel
+# -----------------------------
 def carregar_arquivo():
     if os.path.exists(ARQUIVO):
         return pd.read_excel(ARQUIVO)
@@ -23,51 +27,55 @@ def carregar_arquivo():
         df.to_excel(ARQUIVO, index=False)
         return df
 
-
+# -----------------------------
+# Salvar no Excel
+# -----------------------------
 def salvar_arquivo(df):
     df.to_excel(ARQUIVO, index=False)
 
-
+# -----------------------------
+# Cadastro de gasto
+# -----------------------------
 def cadastrar_gasto(df):
     print("\n--- CADASTRO DE GASTO ---")
 
-    
     data_str = input("Data do gasto (dd/mm/aaaa): ")
 
     try:
         dia, mes, ano = map(int, data_str.split("/"))
-    except ValueError:
-        print("\n Data inválida! Use o formato dd/mm/aaaa.\n")
+    except:
+        print("\n❌ Data inválida! Use o formato dd/mm/aaaa.\n")
         return df
 
-    # Escolha da categoria
+    # Seleção da categoria
     print("\nEscolha a categoria:")
     for i, cat in enumerate(CATEGORIAS, 1):
         print(f"{i} - {cat}")
 
     try:
-        cat_opcao = int(input("Opção: "))
-        categoria = CATEGORIAS[cat_opcao - 1]
+        opc = int(input("Opção: "))
+        categoria = CATEGORIAS[opc - 1]
     except:
-        print("\n Categoria inválida!\n")
+        print("\n❌ Categoria inválida!\n")
         return df
 
     descricao = input("Descrição do gasto: ")
     valor = float(input("Valor (R$): "))
 
-    novo = {
+    novo = pd.DataFrame([{
         "Dia": dia,
         "Mês": mes,
         "Ano": ano,
         "Categoria": categoria,
         "Descrição": descricao,
         "Valor": valor
-    }
+    }])
 
-    df = df.append(novo, ignore_index=True)
+    # 🔧 NOVO MÉTODO sem append
+    df = pd.concat([df, novo], ignore_index=True)
     salvar_arquivo(df)
 
-    print("\n Gasto registrado com sucesso!\n")
+    print("\n✅ Gasto registrado com sucesso!\n")
     return df
 
 # -----------------------------
@@ -79,23 +87,25 @@ def resumo_mensal(df):
     try:
         mes = int(input("Informe o mês: "))
         ano = int(input("Informe o ano: "))
-    except ValueError:
-        print("\n Mês ou ano inválido!\n")
+    except:
+        print("\n❌ Mês ou ano inválido!\n")
         return
 
     filtro = df[(df["Mês"] == mes) & (df["Ano"] == ano)]
 
     if filtro.empty:
-        print("\nNenhum gasto encontrado para este mês.\n")
+        print("\nNenhum gasto encontrado neste mês.\n")
         return
 
     total = filtro["Valor"].sum()
 
-    print(f"\n Total de gastos em {mes}/{ano}: R$ {total:.2f}\n")
+    print(f"\n📌 Total de gastos em {mes}/{ano}: R$ {total:.2f}\n")
     print("Detalhamento:\n")
-    print(filtro[["Dia", "Categoria", "Descrição", "Valor"]])
+    print(filtro[["Dia", "Categoria", "Descrição", "Valor"]].to_string(index=False))
 
-
+# -----------------------------
+# Menu Principal
+# -----------------------------
 def menu():
     df = carregar_arquivo()
 
@@ -112,11 +122,10 @@ def menu():
         elif opcao == "2":
             resumo_mensal(df)
         elif opcao == "3":
-            print("\nSaindo... Até mais!")
+            print("\nSaindo... até a próxima!")
             break
         else:
-            print("\n Opção inválida. Tente novamente.")
-
+            print("\n❌ Opção inválida. Tente novamente.")
 
 if __name__ == "__main__":
     menu()
