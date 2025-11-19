@@ -23,7 +23,6 @@ CATEGORIAS_PADRAO = [
 
 def formatar_brl(valor):
     """Formata um float para o padrão monetário brasileiro (R$ X.XXX,XX)."""
-    
     return f"R$ {valor:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
 def carregar_dados():
@@ -33,39 +32,35 @@ def carregar_dados():
     
     if os.path.exists(FILE_NAME):
         try:
-            
             df = pd.read_excel(FILE_NAME)
-            print(f"✅ Dados carregados com sucesso de {FILE_NAME}")
-            
+            print(f" Dados carregados com sucesso de {FILE_NAME}")
             
             df['valor'] = pd.to_numeric(df['valor'], errors='coerce')
             df['data'] = pd.to_datetime(df['data'], errors='coerce').dt.strftime('%Y-%m-%d')
-            
             
             df.dropna(subset=['valor', 'data'], inplace=True)
             
             return df
         except Exception as e:
-            print(f"❌ Erro ao ler o arquivo Excel ({FILE_NAME}). Iniciando com dados vazios. Erro: {e}")
+            print(f" Erro ao ler o arquivo Excel ({FILE_NAME}). Iniciando com dados vazios. Erro: {e}")
             return pd.DataFrame(columns=colunas)
     else:
-        
-        print(f"⚠️ Arquivo {FILE_NAME} não encontrado. Criando novo controle de despesas.")
+        print(f" Arquivo {FILE_NAME} não encontrado. Criando novo controle de despesas.")
         return pd.DataFrame(columns=colunas)
 
 def salvar_dados(df):
     """Salva o DataFrame principal no arquivo Excel de lançamentos (Atualização)."""
     try:
         df.to_excel(FILE_NAME, index=False)
-        print(f"\n💾 Todos os lançamentos foram salvos em '{FILE_NAME}'.")
+        print(f"\n Todos os lançamentos foram salvos em '{FILE_NAME}'.")
     except Exception as e:
-        print(f"❌ ERRO: Não foi possível salvar os dados. Feche o arquivo {FILE_NAME} se estiver aberto. Erro: {e}")
+        print(f" ERRO: Não foi possível salvar os dados. Feche o arquivo {FILE_NAME} se estiver aberto. Erro: {e}")
 
 
 
 
 def somar_por_categoria(df):
-    """Soma e exibe o valor total gasto por cada categoria (Requisito 1)."""
+    """Soma e exibe o valor total gasto por cada categoria (REQUISITO: Somar os gastos por categoria)."""
     if df.empty:
         print("\nNenhuma despesa para analisar.")
         return
@@ -79,17 +74,17 @@ def somar_por_categoria(df):
     print(resumo[['categoria', 'Valor Gasto']].to_string(index=False))
 
 def calcular_total_mensal(df):
-    """Calcula e exibe a soma total de todas as despesas (Requisito 2)."""
+    """Calcula e exibe a soma total de todas as despesas (REQUISITO: Exibir o total de despesas)."""
     if df.empty:
-        print("\n💰 Total Geral de Despesas Registradas: R$ 0,00")
+        print("\n Total Geral de Despesas Registradas: R$ 0,00")
         return 0
         
     total = df['valor'].sum()
-    print(f"\n💰 Total Geral de Despesas Registradas: {formatar_brl(total)}")
+    print(f"\n Total Geral de Despesas Registradas: {formatar_brl(total)}")
     return total
 
 def exportar_resumo(df):
-    """Exporta o resumo de gastos por categoria para um novo arquivo Excel (Requisito 4)."""
+    """Exporta o resumo de gastos por categoria para um novo arquivo Excel (REQUISITO: Exportar novo arquivo Excel)."""
     
     if df.empty:
         print("\nNenhuma despesa para exportar o resumo.")
@@ -102,15 +97,14 @@ def exportar_resumo(df):
     
     try:
         resumo_df.to_excel(output_file, index=False)
-        print(f"\n💾 Resumo de gastos exportado com sucesso para '{output_file}'!")
+        print(f"\n Resumo de gastos exportado com sucesso para '{output_file}'!")
     except Exception as e:
-        print(f"❌ Erro ao exportar o arquivo. Feche o arquivo '{output_file}' se estiver aberto. Erro: {e}")
-
+        print(f" Erro ao exportar o arquivo. Feche o arquivo '{output_file}' se estiver aberto. Erro: {e}")
 
 
 
 def inserir_despesa(df):
-    """Permite ao usuário inserir uma nova despesa, escolhendo a categoria de uma lista predefinida."""
+    """Permite ao usuário inserir uma nova despesa, escolhendo a categoria de uma lista predefinida (REQUISITO: Permitir inserir novas despesas via console, com opções)."""
     
     print("\n--- Inserir Nova Despesa ---")
     
@@ -130,11 +124,11 @@ def inserir_despesa(df):
                 print(f"Categoria selecionada: {categoria}")
                 break 
             else:
-                print("❌ Número fora do intervalo. Por favor, escolha um número da lista.")
+                print(" Número fora do intervalo. Por favor, escolha um número da lista.")
         except ValueError:
-            print("❌ Entrada inválida. Por favor, digite apenas o número da opção.")
+            print(" Entrada inválida. Por favor, digite apenas o número da opção.")
             
-    
+   
     descricao = input("Descrição do Gasto: ").strip()
     
     
@@ -146,7 +140,7 @@ def inserir_despesa(df):
                  raise ValueError("O valor deve ser positivo.")
             break
         except ValueError as e:
-            print(f"❌ Entrada inválida. O valor deve ser um número positivo. Erro: {e}")
+            print(f" Entrada inválida. O valor deve ser um número positivo. Erro: {e}")
             
     
     data = datetime.now().strftime('%Y-%m-%d')
@@ -160,10 +154,10 @@ def inserir_despesa(df):
         'valor': valor
     })
     
-  
+    
     df_atualizado = pd.concat([df, nova_despesa.to_frame().T], ignore_index=True)
     
-    print(f"\n✅ Despesa '{descricao}' ({formatar_brl(valor)}) adicionada à categoria '{categoria}'.")
+    print(f"\n Despesa '{descricao}' ({formatar_brl(valor)}) adicionada à categoria '{categoria}'.")
     
     return df_atualizado
 
@@ -172,7 +166,6 @@ def inserir_despesa(df):
 
 def menu_principal():
     """Função principal que gerencia o fluxo do programa, exibindo o menu."""
-    
     
     df_despesas = carregar_dados()
     
