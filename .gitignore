@@ -1,0 +1,13 @@
+# Ignorar arquivos de ambiente virtual e cache
+venv/
+__pycache__/
+*.pyc
+*.egg-info/
+
+# Arquivos de dados e resumo gerados pelo programa
+# O arquivo principal de lançamentos deve ser ignorado para evitar conflitos no Git
+lancamentos.xlsx
+resumo_gastos_exportado.xlsx
+
+# Ignorar o arquivo de banco de dados do VS Code
+.vscode/
