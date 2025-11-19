@@ -178,4 +178,4 @@ def menu_principal():
     while True:
         print("\n==================================")
         print("       CONTROLE DE DESPESAS")
-        print("=================================="
+        print("==================================")
