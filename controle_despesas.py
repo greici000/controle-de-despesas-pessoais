@@ -175,11 +175,7 @@ def menu_principal():
     
     df_despesas = carregar_dados()
     
-    while True:
-        print("\n==================================")
-        print("       CONTROLE DE DESPESAS")
-        print("==================================")
-
+   
 # Bloco de Execução Principal
 if __name__ == "__main__":
     menu_principal()
