@@ -20,7 +20,6 @@ CATEGORIAS_PADRAO = [
 
 
 
-
 def formatar_brl(valor):
     """Formata um float para o padrão monetário brasileiro (R$ X.XXX,XX)."""
     return f"R$ {valor:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
@@ -60,7 +59,7 @@ def salvar_dados(df):
 
 
 def somar_por_categoria(df):
-    """Soma e exibe o valor total gasto por cada categoria (REQUISITO: Somar os gastos por categoria)."""
+    """Soma e exibe o valor total gasto por cada categoria (Requisito: Somar os gastos por categoria)."""
     if df.empty:
         print("\nNenhuma despesa para analisar.")
         return
@@ -74,7 +73,7 @@ def somar_por_categoria(df):
     print(resumo[['categoria', 'Valor Gasto']].to_string(index=False))
 
 def calcular_total_mensal(df):
-    """Calcula e exibe a soma total de todas as despesas (REQUISITO: Exibir o total de despesas)."""
+    """Calcula e exibe a soma total de todas as despesas (Requisito: Exibir o total de despesas)."""
     if df.empty:
         print("\n Total Geral de Despesas Registradas: R$ 0,00")
         return 0
@@ -84,7 +83,7 @@ def calcular_total_mensal(df):
     return total
 
 def exportar_resumo(df):
-    """Exporta o resumo de gastos por categoria para um novo arquivo Excel (REQUISITO: Exportar novo arquivo Excel)."""
+    """Exporta o resumo de gastos por categoria para um novo arquivo Excel (Requisito: Exportar novo arquivo Excel)."""
     
     if df.empty:
         print("\nNenhuma despesa para exportar o resumo.")
@@ -103,15 +102,16 @@ def exportar_resumo(df):
 
 
 
+
 def inserir_despesa(df):
-    """Permite ao usuário inserir uma nova despesa, escolhendo a categoria de uma lista predefinida (REQUISITO: Permitir inserir novas despesas via console, com opções)."""
+    """Permite ao usuário inserir uma nova despesa, escolhendo a categoria de uma lista predefinida."""
     
     print("\n--- Inserir Nova Despesa ---")
     
-    
+   
     while True:
         print("\nEscolha a Categoria:")
-        
+       
         for i, cat in enumerate(CATEGORIAS_PADRAO, 1):
             print(f"{i}. {cat}")
         
@@ -128,10 +128,10 @@ def inserir_despesa(df):
         except ValueError:
             print(" Entrada inválida. Por favor, digite apenas o número da opção.")
             
-   
+  
     descricao = input("Descrição do Gasto: ").strip()
     
-    
+   
     while True:
         try:
             valor_str = input("Valor (Use ponto como separador decimal, Ex: 50.80): ").replace(",", ".")
@@ -146,7 +146,7 @@ def inserir_despesa(df):
     data = datetime.now().strftime('%Y-%m-%d')
     print(f"Data registrada automaticamente: {data}")
     
-    
+   
     nova_despesa = pd.Series({
         'data': data,
         'categoria': categoria,
@@ -154,13 +154,12 @@ def inserir_despesa(df):
         'valor': valor
     })
     
-    
+  
     df_atualizado = pd.concat([df, nova_despesa.to_frame().T], ignore_index=True)
     
     print(f"\n Despesa '{descricao}' ({formatar_brl(valor)}) adicionada à categoria '{categoria}'.")
     
     return df_atualizado
-
 
 
 
