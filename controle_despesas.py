@@ -179,3 +179,7 @@ def menu_principal():
         print("\n==================================")
         print("       CONTROLE DE DESPESAS")
         print("==================================")
+
+# Bloco de Execução Principal
+if __name__ == "__main__":
+    menu_principal()
