@@ -59,7 +59,7 @@ def salvar_dados(df):
 
 
 def somar_por_categoria(df):
-    """Soma e exibe o valor total gasto por cada categoria (Requisito: Somar os gastos por categoria)."""
+    """Soma e exibe o valor total gasto por cada categoria."""
     if df.empty:
         print("\nNenhuma despesa para analisar.")
         return
@@ -73,7 +73,7 @@ def somar_por_categoria(df):
     print(resumo[['categoria', 'Valor Gasto']].to_string(index=False))
 
 def calcular_total_mensal(df):
-    """Calcula e exibe a soma total de todas as despesas (Requisito: Exibir o total de despesas)."""
+    """Calcula e exibe a soma total de todas as despesas."""
     if df.empty:
         print("\n Total Geral de Despesas Registradas: R$ 0,00")
         return 0
@@ -83,7 +83,7 @@ def calcular_total_mensal(df):
     return total
 
 def exportar_resumo(df):
-    """Exporta o resumo de gastos por categoria para um novo arquivo Excel (Requisito: Exportar novo arquivo Excel)."""
+    """Exporta o resumo de gastos por categoria para um novo arquivo Excel."""
     
     if df.empty:
         print("\nNenhuma despesa para exportar o resumo.")
@@ -102,16 +102,15 @@ def exportar_resumo(df):
 
 
 
-
 def inserir_despesa(df):
-    """Permite ao usuário inserir uma nova despesa, escolhendo a categoria de uma lista predefinida."""
+    """Permite ao usuário inserir uma nova despesa, escolhendo a categoria, digitando a data, a descrição e o valor."""
     
     print("\n--- Inserir Nova Despesa ---")
     
-   
+
     while True:
         print("\nEscolha a Categoria:")
-       
+        
         for i, cat in enumerate(CATEGORIAS_PADRAO, 1):
             print(f"{i}. {cat}")
         
@@ -122,16 +121,27 @@ def inserir_despesa(df):
             if 0 <= indice < len(CATEGORIAS_PADRAO):
                 categoria = CATEGORIAS_PADRAO[indice]
                 print(f"Categoria selecionada: {categoria}")
-                break 
+                break
             else:
                 print(" Número fora do intervalo. Por favor, escolha um número da lista.")
         except ValueError:
             print(" Entrada inválida. Por favor, digite apenas o número da opção.")
             
-  
-    descricao = input("Descrição do Gasto: ").strip()
-    
    
+    descricao = input("Descrição do Gasto: ").strip()
+
+    
+    while True:
+        data_str = input("Data do Gasto (Formato YYYY-MM-DD, Ex: 2025-01-25): ").strip()
+        try:
+            
+            data_validada = datetime.strptime(data_str, '%Y-%m-%d')
+            data = data_validada.strftime('%Y-%m-%d') # Salva no formato padronizado
+            break
+        except ValueError:
+            print(" Formato de data inválido. Use o formato YYYY-MM-DD (Ano-Mês-Dia).")
+    
+    
     while True:
         try:
             valor_str = input("Valor (Use ponto como separador decimal, Ex: 50.80): ").replace(",", ".")
@@ -143,10 +153,6 @@ def inserir_despesa(df):
             print(f" Entrada inválida. O valor deve ser um número positivo. Erro: {e}")
             
     
-    data = datetime.now().strftime('%Y-%m-%d')
-    print(f"Data registrada automaticamente: {data}")
-    
-   
     nova_despesa = pd.Series({
         'data': data,
         'categoria': categoria,
@@ -154,12 +160,13 @@ def inserir_despesa(df):
         'valor': valor
     })
     
-  
+   
     df_atualizado = pd.concat([df, nova_despesa.to_frame().T], ignore_index=True)
     
-    print(f"\n Despesa '{descricao}' ({formatar_brl(valor)}) adicionada à categoria '{categoria}'.")
+    print(f"\n Despesa '{descricao}' ({formatar_brl(valor)}) adicionada à categoria '{categoria}' na data {data}.")
     
     return df_atualizado
+
 
 
 
@@ -171,36 +178,4 @@ def menu_principal():
     while True:
         print("\n==================================")
         print("       CONTROLE DE DESPESAS")
-        print("==================================")
-        print("1. Inserir Nova Despesa")
-        print("2. Ver Resumo por Categoria")
-        print("3. Ver Total Geral de Despesas")
-        print("4. Exportar Resumo para Excel")
-        print("5. Sair e Salvar Dados")
-        print("----------------------------------")
-        
-        escolha = input("Escolha uma opção (1-5): ").strip()
-        
-        if escolha == '1':
-            df_despesas = inserir_despesa(df_despesas)
-            
-        elif escolha == '2':
-            somar_por_categoria(df_despesas)
-            
-        elif escolha == '3':
-            calcular_total_mensal(df_despesas)
-            
-        elif escolha == '4':
-            exportar_resumo(df_despesas)
-            
-        elif escolha == '5':
-            salvar_dados(df_despesas)
-            print("\nObrigado por usar o sistema. Tchau!")
-            break
-        
-        else:
-            print("Opção inválida. Por favor, escolha um número de 1 a 5.")
-
-
-if __name__ == "__main__":
-    menu_principal()
+        print("=================================="
