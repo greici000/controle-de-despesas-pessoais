@@ -36,7 +36,7 @@ def cadastrar_gasto(df):
     try:
         dia, mes, ano = map(int, data_str.split("/"))
     except:
-        print("\n❌ Data inválida! Use o formato dd/mm/aaaa.\n")
+        print("\n Data inválida! Use o formato dd/mm/aaaa.\n")
         return df
 
     
@@ -48,7 +48,7 @@ def cadastrar_gasto(df):
         opc = int(input("Opção: "))
         categoria = CATEGORIAS[opc - 1]
     except:
-        print("\n❌ Categoria inválida!\n")
+        print("\n Categoria inválida!\n")
         return df
 
     descricao = input("Descrição do gasto: ")
@@ -67,7 +67,7 @@ def cadastrar_gasto(df):
     df = pd.concat([df, novo], ignore_index=True)
     salvar_arquivo(df)
 
-    print("\n✅ Gasto registrado com sucesso!\n")
+    print("\n Gasto registrado com sucesso!\n")
     return df
 
 
@@ -78,7 +78,7 @@ def resumo_mensal(df):
         mes = int(input("Informe o mês: "))
         ano = int(input("Informe o ano: "))
     except:
-        print("\n❌ Mês ou ano inválido!\n")
+        print("\n Mês ou ano inválido!\n")
         return
 
     filtro = df[(df["Mês"] == mes) & (df["Ano"] == ano)]
@@ -89,7 +89,7 @@ def resumo_mensal(df):
 
     total = filtro["Valor"].sum()
 
-    print(f"\n📌 Total de gastos em {mes}/{ano}: R$ {total:.2f}\n")
+    print(f"\n Total de gastos em {mes}/{ano}: R$ {total:.2f}\n")
     print("Detalhamento:\n")
     print(filtro[["Dia", "Categoria", "Descrição", "Valor"]].to_string(index=False))
 
@@ -113,7 +113,7 @@ def menu():
             print("\nSaindo... até a próxima!")
             break
         else:
-            print("\n❌ Opção inválida. Tente novamente.")
+            print("\n Opção inválida. Tente novamente.")
 
 if __name__ == "__main__":
     menu()
