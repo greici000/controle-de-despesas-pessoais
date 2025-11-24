@@ -3,9 +3,7 @@ import os
 
 ARQUIVO = "gastos.xlsx"
 
-# -----------------------------
-# Lista fixa de categorias
-# -----------------------------
+
 CATEGORIAS = [
     "Alimentação",
     "Transporte",
@@ -16,9 +14,7 @@ CATEGORIAS = [
     "Serviços"
 ]
 
-# -----------------------------
-# Carregar arquivo Excel
-# -----------------------------
+
 def carregar_arquivo():
     if os.path.exists(ARQUIVO):
         return pd.read_excel(ARQUIVO)
@@ -27,15 +23,11 @@ def carregar_arquivo():
         df.to_excel(ARQUIVO, index=False)
         return df
 
-# -----------------------------
-# Salvar no Excel
-# -----------------------------
+
 def salvar_arquivo(df):
     df.to_excel(ARQUIVO, index=False)
 
-# -----------------------------
-# Cadastro de gasto
-# -----------------------------
+
 def cadastrar_gasto(df):
     print("\n--- CADASTRO DE GASTO ---")
 
@@ -47,7 +39,7 @@ def cadastrar_gasto(df):
         print("\n❌ Data inválida! Use o formato dd/mm/aaaa.\n")
         return df
 
-    # Seleção da categoria
+    
     print("\nEscolha a categoria:")
     for i, cat in enumerate(CATEGORIAS, 1):
         print(f"{i} - {cat}")
@@ -71,16 +63,14 @@ def cadastrar_gasto(df):
         "Valor": valor
     }])
 
-    # 🔧 NOVO MÉTODO sem append
+  
     df = pd.concat([df, novo], ignore_index=True)
     salvar_arquivo(df)
 
     print("\n✅ Gasto registrado com sucesso!\n")
     return df
 
-# -----------------------------
-# Resumo mensal
-# -----------------------------
+
 def resumo_mensal(df):
     print("\n--- RESUMO MENSAL ---")
 
@@ -103,9 +93,7 @@ def resumo_mensal(df):
     print("Detalhamento:\n")
     print(filtro[["Dia", "Categoria", "Descrição", "Valor"]].to_string(index=False))
 
-# -----------------------------
-# Menu Principal
-# -----------------------------
+
 def menu():
     df = carregar_arquivo()
 
