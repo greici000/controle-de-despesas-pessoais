@@ -1,3 +1,11 @@
+#4. Controle de Despesas Pessoais (Excel)
+#Kleber e Greiciele Desenvolva um programa em Python que leia um arquivo Excel (.xlsx) com lançamentos financeiros (colunas: data, categoria, descrição, valor). O programa deve:
+
+#Somar os gastos por categoria;
+#Exibir o total mensal de despesas;
+#Permitir inserir novas despesas via console;
+#Exportar um novo arquivo Excel com um resumo de gastos por categoria. O objetivo é ajudar o usuário a entender para onde vai o seu dinheiro.
+
 import pandas as pd
 import os
 
